@@ -48,19 +48,19 @@ cluster_descriptions = {
             , 'image_url': 'Baby_pic.png'}
     },
     '6-8세': {
-        0: {'type': '저이용 집중형', 'description': '낮은 사용량과 특정 매체 편중이 특징이며, 학습 중심 또는 보호자 통제가 작용한 것으로 보입니다.', 'keywords': ['#학습중심', '#편중형', '#저이용초등', '#제한사용자'],
+        0: {'type': '저이용 집중형', 'description': '낮은 사용량과 특정 매체 편중이 특징이며, 학습 중심 또는 보호자 통제가 작용한 것으로 보입니다.', 'keywords': ['#학습중심', '#편중형', '#저이용', '#제한사용자'],
             'image_url': 'Kindergarden_pic.png'},
-        1: {'type': 'Heavy 멀티 유저형', 'description': '자주, 오래, 다양한 매체를 탐색하며 사용하는 능동적인 시청자입니다.', 'keywords': ['#고이용초등', '#다매체', '#탐색형'], 
+        1: {'type': 'Heavy 멀티 유저형', 'description': '자주, 오래, 다양한 매체를 탐색하며 사용하는 능동적인 시청자입니다.', 'keywords': ['#고이용', '#다매체', '#탐색형'], 
             'image_url': 'Kindergarden_pic.png'},
         2: {'type': '주말 전용형', 'description': '주중에는 거의 사용하지 않고, 주말에만 집중적으로 사용하는 유형입니다.', 'keywords': ['#주말전용', '#시간제한형', '#요일기반', '#보호자주도형'], 
             'image_url': 'Kindergarden_pic.png'}
     },
     '9-11세': {
-        0: {'type': '저이용 집중형 이용자', 'description': '낮은 사용량과 빈도, 특정 콘텐츠에 몰입하는 루틴 소비형입니다.', 'keywords': ['#고정몰입형', '#비확산', '#저이용고학년', '#루틴소비'], 
+        0: {'type': '저이용 집중형 이용자', 'description': '낮은 사용량과 빈도, 특정 콘텐츠에 몰입하는 루틴 소비형입니다.', 'keywords': ['#고정몰입형', '#비확산', '#저이용', '#루틴소비'], 
             'image_url': 'Elementay_pic.png'},
         1: {'type': '균형 사용자형', 'description': '매체 사용량과 분산도 모두 적당한, 초등 고학년의 안정적인 일반형입니다.', 'keywords': ['#일상시청', '#중간사용량', '#규칙적', '#균형소비'], 
             'image_url': 'Elementay_pic.png'},
-        2: {'type': '탐색적 사용자형', 'description': '많고 자주 시청하며, 다매체를 탐색적으로 활용하는 확장형 사용자입니다.', 'keywords': ['#탐색형고학년', '#다매체', '#고빈도', '#자율시청확장형'], 
+        2: {'type': '탐색적 사용자형', 'description': '많고 자주 시청하며, 다매체를 탐색적으로 활용하는 확장형 사용자입니다.', 'keywords': ['#탐색형', '#다매체', '#고빈도', '#자율시청확장형'], 
             'image_url': 'Elementay_pic.png'}
     }
 }
@@ -173,20 +173,25 @@ def visualize_child_in_group(df_with_labels, child_info):
         for col, subtitle in zip([col1, col2], ['주중', '주말']):
             fig, ax = plt.subplots(figsize=(6, 5))
             sns.boxplot(data=df_group, y=col, ax=ax, width=0.4, fliersize=3, linewidth=1.2)
-            if child_point[col] is not None and pd.notna(child_point[col]):
-                ax.scatter(x=0, y=child_point[col], color='red', s=50, marker='D', label='내 자녀', zorder=10)
-                mean_val = df_group[col].mean()
-                diff = child_point[col] - mean_val
-                if abs(diff) > 0.1:
-                    st.markdown(f"🔍 평균보다 **{abs(diff):.1f}** 만큼 {'많이' if diff > 0 else '적게'} 이용하고 있어요!" )
-                else:
-                    st.markdown("🔍 평균과 거의 비슷하게 이용하고 있어요!")
-                ax.legend()
+                
             ax.set_title(f"{age_group} - {label} ({subtitle})", fontsize=12)
             ax.set_ylabel(label)
             ax.set_xlabel("")
             ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.6)
             st.pyplot(fig)
+            
+            if child_point[col] is not None and pd.notna(child_point[col]):
+                ax.scatter(x=0, y=child_point[col], color='red', s=50, marker='D', label='내 자녀', zorder=10)
+                mean_val = df_group[col].mean()
+                diff = child_point[col] - mean_val
+
+                if abs(diff) > 0.1:
+                    amount = abs(round(diff, 1))  
+                    direction = "많이" if diff > 0 else "적게"
+                    st.markdown(f"🔍 평균보다 **{amount}** 만큼 {direction} 이용하고 있어요!")
+                else:
+                    st.markdown("🔍 평균과 거의 비슷하게 이용하고 있어요!")
+                ax.legend()
 
     st.markdown("---")
     
@@ -228,6 +233,7 @@ def plot_radar_chart(df_group, child_info):
     ax.set_title("자녀 vs 또래 평균 비교", fontsize=14)
     ax.legend(loc='upper right', bbox_to_anchor=(1.2, 1.1))
     st.pyplot(fig)
+
 
 def main():
     st.set_page_config(page_title="쪼꼬미디어", page_icon="🍫")
