@@ -176,7 +176,11 @@ def visualize_child_in_group(df_with_labels, child_info):
             if child_point[col] is not None and pd.notna(child_point[col]):
                 ax.scatter(x=0, y=child_point[col], color='red', s=50, marker='D', label='내 자녀', zorder=10)
                 mean_val = df_group[col].mean()
-                st.markdown(f"🔍 평균보다 **{child_point[col] - mean_val:.1f}** 만큼 {'많이' if child_point[col] > mean_val else '적게'} 이용하고 있어요!")
+                diff = child_point[col] - mean_val
+                if abs(diff) > 0.1:
+                    st.markdown(f"🔍 평균보다 **{abs(diff):.1f}** 만큼 {'많이' if diff > 0 else '적게'} 이용하고 있어요!" )
+                else:
+                    st.markdown("🔍 평균과 거의 비슷하게 이용하고 있어요!")
                 ax.legend()
             ax.set_title(f"{age_group} - {label} ({subtitle})", fontsize=12)
             ax.set_ylabel(label)
