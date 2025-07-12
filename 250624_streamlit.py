@@ -13,6 +13,26 @@ font_path = os.path.join(os.path.dirname(__file__), 'ttf', 'MaruBuri-Regular.ttf
 font_name = fm.FontProperties(fname=font_path).get_name()
 plt.rcParams['font.family'] = font_name
 
+font_path = os.path.join(os.path.dirname(__file__), 'ttf', 'MaruBuri-Regular.ttf')
+
+# 1. 파일 존재 여부
+print("파일 존재? 👉", os.path.exists(font_path))
+
+# 2. 직접 열어보기
+try:
+    with open(font_path, 'rb') as f:
+        print("파일 열기 성공 🎉")
+except Exception as e:
+    print("파일 열기 실패 😭:", e)
+
+# 3. matplotlib 폰트 불러오기 테스트
+try:
+    font_name = fm.FontProperties(fname=font_path).get_name()
+    print("폰트 이름:", font_name)
+except Exception as e:
+    print("matplotlib 폰트 로딩 실패 😡:", e)
+
+
 # 마이너스 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
 
