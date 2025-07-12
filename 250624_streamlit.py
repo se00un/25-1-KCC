@@ -10,37 +10,14 @@ import platform
 
 # 한글 폰트 설정
 font_path = os.path.join(os.path.dirname(__file__), 'TTF', 'MaruBuri-Regular.ttf')
-font_name = fm.FontProperties(fname=font_path).get_name()
-plt.rcParams['font.family'] = font_name
 
-# 존재 확인 (필수)
+# FontProperties 객체 생성
 if os.path.exists(font_path):
-    font_name = fm.FontProperties(fname=font_path).get_name()
-    plt.rcParams['font.family'] = font_name
+    font_prop = fm.FontProperties(fname=font_path)
+    plt.rc('font', family=font_prop.get_name())
     plt.rcParams['axes.unicode_minus'] = False
 else:
-    import streamlit as st
-    st.error(f"❌ 폰트 파일이 없습니다! 경로 확인 필요: {font_path}")
-
-
-# 파일 존재 여부 출력
-st.write("✅ 파일 경로:", font_path)
-st.write("✅ 파일 존재 여부:", os.path.exists(font_path))
-
-# 파일 오픈 여부 확인
-try:
-    with open(font_path, 'rb') as f:
-        st.write("✅ 파일 열기 성공!")
-except Exception as e:
-    st.write("❌ 파일 열기 실패:", e)
-
-# matplotlib 적용 여부 확인
-try:
-    font_name = fm.FontProperties(fname=font_path).get_name()
-    st.write("✅ 불러온 폰트 이름:", font_name)
-except Exception as e:
-    st.write("❌ matplotlib 폰트 불러오기 실패:", e)
-
+    print("❌ 폰트 경로 오류. 기본 폰트 사용")
 
 # 마이너스 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
@@ -256,9 +233,10 @@ def plot_radar_chart(df_group, child_info):
 
     ax.plot(angles, group_mean, label='평균', color='gray', linestyle='dashed')
     ax.fill(angles, group_mean, color='gray', alpha=0.15)
+    ax.set_thetagrids(np.degrees(angles[:-1]), labels, fontproperties=font_prop)
+    ax.set_title("자녀 vs 또래 평균 비교", fontsize=14, fontproperties=font_prop)
 
     ax.set_thetagrids(np.degrees(angles[:-1]), labels)
-    ax.set_title("자녀 vs 또래 평균 비교", fontsize=14)
     ax.legend(loc='upper right', bbox_to_anchor=(1.2, 1.1))
     st.pyplot(fig)
 
