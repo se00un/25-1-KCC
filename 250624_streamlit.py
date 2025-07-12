@@ -9,10 +9,10 @@ from sklearn.decomposition import PCA
 import platform
 
 # 한글 폰트 설정
-if platform.system() == 'Darwin':  # macOS
-    plt.rcParams['font.family'] = 'AppleGothic'
+if platform.system() == 'Darwin':
+    font_path = '/System/Library/Fonts/Supplemental/AppleGothic.ttf'
 elif platform.system() == 'Windows':
-    plt.rcParams['font.family'] = 'Malgun Gothic'
+    font_path = 'C:/Windows/Fonts/malgun.ttf'
 
 # 마이너스 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
