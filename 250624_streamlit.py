@@ -9,11 +9,18 @@ from sklearn.decomposition import PCA
 import platform
 
 # 한글 폰트 설정
-font_path = os.path.join(os.path.dirname(__file__), 'ttf', 'MaruBuri-Regular.ttf')
+font_path = os.path.join(os.path.dirname(__file__), 'TTF', 'MaruBuri-Regular.ttf')
 font_name = fm.FontProperties(fname=font_path).get_name()
 plt.rcParams['font.family'] = font_name
 
-font_path = os.path.join(os.path.dirname(__file__), 'ttf', 'MaruBuri-Regular.ttf')
+# 존재 확인 (필수)
+if os.path.exists(font_path):
+    font_name = fm.FontProperties(fname=font_path).get_name()
+    plt.rcParams['font.family'] = font_name
+    plt.rcParams['axes.unicode_minus'] = False
+else:
+    import streamlit as st
+    st.error(f"❌ 폰트 파일이 없습니다! 경로 확인 필요: {font_path}")
 
 
 # 파일 존재 여부 출력
