@@ -9,7 +9,7 @@ from sklearn.decomposition import PCA
 import platform
 
 # 한글 폰트 설정
-font_path = './fonts/NanumGothic.ttf'
+font_path = os.path.join(os.path.dirname(__file__), 'ttf', 'MaruBuri-Regular.ttf')
 font_name = fm.FontProperties(fname=font_path).get_name()
 plt.rcParams['font.family'] = font_name
 
