@@ -6,6 +6,7 @@ import seaborn as sns
 import streamlit as st
 import matplotlib.font_manager as fm
 from sklearn.decomposition import PCA
+from matplotlib.lines import Line2D
 import platform
 
 # 한글 폰트 설정
@@ -179,9 +180,9 @@ def visualize_child_in_group(df_with_labels, child_info):
             fig, ax = plt.subplots(figsize=(6, 5))
             sns.boxplot(data=df_group, y=col, ax=ax, width=0.4, fliersize=3, linewidth=1.2)
                 
-            ax.set_title(f"{age_group} - {label} ({subtitle})", fontsize=12)
-            ax.set_ylabel(label)
-            ax.set_xlabel("")
+            ax.set_title(f"{age_group} - {label} ({subtitle})", fontsize=12, fontproperties=font_prop)
+            ax.set_ylabel(label, fontproperties=font_prop)
+            ax.set_xlabel("", fontproperties=font_prop)
             ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.6)
             st.pyplot(fig)
             
@@ -235,9 +236,12 @@ def plot_radar_chart(df_group, child_info):
     ax.fill(angles, group_mean, color='gray', alpha=0.15)
     ax.set_thetagrids(np.degrees(angles[:-1]), labels, fontproperties=font_prop)
     ax.set_title("자녀 vs 또래 평균 비교", fontsize=14, fontproperties=font_prop)
-
+    legend_elements = [
+    Line2D([0], [0], color='red', lw=2, label='우리 아이'),
+    Line2D([0], [0], color='gray', linestyle='dashed', lw=2, label='평균')
+]
+    ax.legend(handles=legend_elements, loc='upper right', bbox_to_anchor=(1.2, 1.1), prop=font_prop)
     ax.set_thetagrids(np.degrees(angles[:-1]), labels)
-    ax.legend(loc='upper right', bbox_to_anchor=(1.2, 1.1))
     st.pyplot(fig)
 
 
